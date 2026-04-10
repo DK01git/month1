@@ -1,0 +1,115 @@
+version: "3.8"
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.9.0-python3.11
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres-meta/airflow
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
+    _PIP_ADDITIONAL_REQUIREMENTS: >
+      apache-airflow-providers-amazon
+      apache-airflow-providers-postgres
+      pandas
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+  depends_on:
+    postgres-meta:
+      condition: service_healthy
+
+services:
+  # ---------------------------
+  # Airflow Metadata Database
+  # ---------------------------
+  postgres-meta:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    volumes:
+      - postgres-meta-data:/var/lib/postgresql/data
+
+  # ---------------------------
+  # Retail PostgreSQL (Staging / Curated DB)
+  # ---------------------------
+  postgres-retail:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: retailco
+      POSTGRES_PASSWORD: retailco
+      POSTGRES_DB: retailco
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "retailco"]
+      interval: 5s
+      retries: 5
+    volumes:
+      - postgres-retail-data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  # ---------------------------
+  # MinIO (S3-compatible Object Storage)
+  # ---------------------------
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      retries: 5
+
+  # ---------------------------
+  # Airflow Init (DB + Admin User)
+  # ---------------------------
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command: >-
+      -c "airflow db migrate &&
+      airflow users create --username airflow --password airflow --firstname Admin --lastname User --role Admin --email admin@example.com"
+    restart: "no"
+
+  # ---------------------------
+  # Airflow Webserver
+  # ---------------------------
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      retries: 5
+    restart: always
+
+  # ---------------------------
+  # Airflow Scheduler
+  # ---------------------------
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+
+volumes:
+  postgres-meta-data:
+  postgres-retail-data:
+  minio-data:

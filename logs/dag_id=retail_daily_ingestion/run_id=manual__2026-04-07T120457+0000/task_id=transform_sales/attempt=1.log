@@ -1,0 +1,446 @@
+[2026-04-08T00:26:16.150+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-04-08T00:26:16.176+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: retail_daily_ingestion.transform_sales manual__2026-04-07T12:04:57+00:00 [queued]>
+[2026-04-08T00:26:16.185+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: retail_daily_ingestion.transform_sales manual__2026-04-07T12:04:57+00:00 [queued]>
+[2026-04-08T00:26:16.186+0000] {taskinstance.py:2303} INFO - Starting attempt 1 of 2
+[2026-04-08T00:26:16.201+0000] {taskinstance.py:2327} INFO - Executing <Task(PythonOperator): transform_sales> on 2026-04-07 12:04:57+00:00
+[2026-04-08T00:26:16.207+0000] {standard_task_runner.py:63} INFO - Started process 3181 to run task
+[2026-04-08T00:26:16.210+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'retail_daily_ingestion', 'transform_sales', 'manual__2026-04-07T12:04:57+00:00', '--job-id', '30', '--raw', '--subdir', 'DAGS_FOLDER/retail_daily_ingestion.py', '--cfg-path', '/tmp/tmpc002a93t']
+[2026-04-08T00:26:16.213+0000] {standard_task_runner.py:91} INFO - Job 30: Subtask transform_sales
+[2026-04-08T00:26:16.273+0000] {task_command.py:426} INFO - Running <TaskInstance: retail_daily_ingestion.transform_sales manual__2026-04-07T12:04:57+00:00 [running]> on host 649f4949adfd
+[2026-04-08T00:26:16.394+0000] {taskinstance.py:2644} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='data-engineering-team@company.com' AIRFLOW_CTX_DAG_OWNER='data-engineering' AIRFLOW_CTX_DAG_ID='retail_daily_ingestion' AIRFLOW_CTX_TASK_ID='transform_sales' AIRFLOW_CTX_EXECUTION_DATE='2026-04-07T12:04:57+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-07T12:04:57+00:00'
+[2026-04-08T00:26:16.395+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-04-08T00:26:16.422+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.436+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.11/site-packages/***/providers/common/sql/hooks/sql.py:227 UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+[2026-04-08T00:26:16.441+0000] {retail_daily_ingestion.py:233} INFO - Transform input: 100 rows from staging
+[2026-04-08T00:26:16.460+0000] {retail_daily_ingestion.py:282} INFO - Aggregated to 20 store-product-date rows
+[2026-04-08T00:26:16.473+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.484+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.11/site-packages/***/providers/common/sql/hooks/sql.py:227 UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+[2026-04-08T00:26:16.489+0000] {retail_daily_ingestion.py:297} INFO - Enriched dataset: 20 rows ready for curated load
+[2026-04-08T00:26:16.502+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.510+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR001', 'PRD0001', datetime.date(2026, 4, 6), 'Electronics', 'Sub0', 'Brand0', 5, 200.0, 16.0, 5, 0.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.513+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.525+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.533+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR001', 'PRD0006', datetime.date(2026, 4, 6), 'Clothing', 'Sub0', 'Brand1', 25, 1157.81, 92.62, 5, 2.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.535+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.547+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.554+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR001', 'PRD0011', datetime.date(2026, 4, 6), 'Food', 'Sub0', 'Brand2', 5, 190.0, 15.2, 5, 5.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.556+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.568+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.575+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR001', 'PRD0016', datetime.date(2026, 4, 6), 'Home', 'Sub0', 'Brand3', 25, 1098.44, 87.88, 5, 7.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.577+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.589+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.596+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR002', 'PRD0002', datetime.date(2026, 4, 6), 'Clothing', 'Sub1', 'Brand1', 5, 206.46, 16.52, 5, 0.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.598+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.609+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.617+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR002', 'PRD0007', datetime.date(2026, 4, 6), 'Food', 'Sub1', 'Brand2', 30, 1425.9, 114.07, 5, 3.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.618+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.630+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.638+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR002', 'PRD0012', datetime.date(2026, 4, 6), 'Home', 'Sub1', 'Brand3', 5, 196.09, 15.69, 5, 5.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.640+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.652+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.659+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR002', 'PRD0017', datetime.date(2026, 4, 6), 'Electronics', 'Sub1', 'Brand0', 30, 1352.4, 108.19, 5, 8.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.661+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.673+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.680+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR003', 'PRD0003', datetime.date(2026, 4, 6), 'Food', 'Sub2', 'Brand2', 10, 425.7, 34.06, 5, 1.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.682+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.695+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.702+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR003', 'PRD0008', datetime.date(2026, 4, 6), 'Home', 'Sub2', 'Brand3', 35, 1705.64, 136.45, 5, 3.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.704+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.716+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.723+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR003', 'PRD0013', datetime.date(2026, 4, 6), 'Electronics', 'Sub2', 'Brand0', 10, 404.2, 32.34, 5, 6.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.725+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.737+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.745+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR003', 'PRD0018', datetime.date(2026, 4, 6), 'Clothing', 'Sub2', 'Brand1', 35, 1617.26, 129.38, 5, 8.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.747+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.761+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.769+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR004', 'PRD0004', datetime.date(2026, 4, 6), 'Home', 'Sub3', 'Brand3', 15, 657.49, 52.6, 5, 1.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.771+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.783+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.791+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR004', 'PRD0009', datetime.date(2026, 4, 6), 'Electronics', 'Sub3', 'Brand0', 40, 1996.8, 159.74, 5, 4.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.793+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.806+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.813+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR004', 'PRD0014', datetime.date(2026, 4, 6), 'Clothing', 'Sub3', 'Brand1', 15, 624.11, 49.93, 5, 6.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.815+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.828+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.836+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR004', 'PRD0019', datetime.date(2026, 4, 6), 'Food', 'Sub3', 'Brand2', 40, 1892.8, 151.42, 5, 9.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.837+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.850+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.857+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR005', 'PRD0005', datetime.date(2026, 4, 6), 'Electronics', 'Sub4', 'Brand0', 20, 901.6, 72.13, 5, 2.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.859+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.871+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.878+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR005', 'PRD0010', datetime.date(2026, 4, 6), 'Clothing', 'Sub4', 'Brand1', 45, 2299.16, 183.93, 5, 4.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.880+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.892+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.899+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR005', 'PRD0015', datetime.date(2026, 4, 6), 'Food', 'Sub4', 'Brand2', 20, 855.6, 68.45, 5, 7.0, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.901+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.914+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:16.921+0000] {sql.py:457} INFO - Running statement: 
+            INSERT INTO curated.fact_daily_sales (
+                store_id, product_id, transaction_date,
+                category, subcategory, brand,
+                total_quantity, total_revenue, total_tax,
+                transaction_count, avg_discount, load_timestamp
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s
+            )
+            ON CONFLICT (store_id, product_id, transaction_date)
+            DO UPDATE SET
+                total_quantity    = EXCLUDED.total_quantity,
+                total_revenue     = EXCLUDED.total_revenue,
+                total_tax         = EXCLUDED.total_tax,
+                transaction_count = EXCLUDED.transaction_count,
+                avg_discount      = EXCLUDED.avg_discount,
+                load_timestamp    = EXCLUDED.load_timestamp;
+            , parameters: ('STR005', 'PRD0020', datetime.date(2026, 4, 6), 'Home', 'Sub4', 'Brand3', 45, 2178.79, 174.3, 5, 9.5, Timestamp('2026-04-08 00:26:16.459697'))
+[2026-04-08T00:26:16.923+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:16.925+0000] {retail_daily_ingestion.py:339} INFO - Curated load complete: 20 rows upserted into curated.fact_daily_sales
+[2026-04-08T00:26:16.925+0000] {python.py:237} INFO - Done. Returned value was: None
+[2026-04-08T00:26:16.925+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-04-08T00:26:16.940+0000] {taskinstance.py:1205} INFO - Marking task as SUCCESS. dag_id=retail_daily_ingestion, task_id=transform_sales, execution_date=20260407T120457, start_date=20260408T002616, end_date=20260408T002616
+[2026-04-08T00:26:16.983+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2026-04-08T00:26:17.017+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.11/site-packages/***/models/baseoperator.py:1296 AirflowProviderDeprecationWarning: Call to deprecated class PostgresOperator. (Please use `***.providers.common.sql.operators.sql.SQLExecuteQueryOperator`.Also, you can provide `hook_params={'schema': <database>}`.)
+[2026-04-08T00:26:17.034+0000] {taskinstance.py:3482} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-04-08T00:26:17.037+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

@@ -1,0 +1,46 @@
+[2026-04-08T00:26:45.507+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-04-08T00:26:45.539+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: retail_daily_ingestion.ingest_to_staging manual__2026-04-08T00:20:57+00:00 [queued]>
+[2026-04-08T00:26:45.550+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: retail_daily_ingestion.ingest_to_staging manual__2026-04-08T00:20:57+00:00 [queued]>
+[2026-04-08T00:26:45.550+0000] {taskinstance.py:2303} INFO - Starting attempt 2 of 5
+[2026-04-08T00:26:45.566+0000] {taskinstance.py:2327} INFO - Executing <Task(PythonOperator): ingest_to_staging> on 2026-04-08 00:20:57+00:00
+[2026-04-08T00:26:45.573+0000] {standard_task_runner.py:63} INFO - Started process 3226 to run task
+[2026-04-08T00:26:45.576+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'retail_daily_ingestion', 'ingest_to_staging', 'manual__2026-04-08T00:20:57+00:00', '--job-id', '43', '--raw', '--subdir', 'DAGS_FOLDER/retail_daily_ingestion.py', '--cfg-path', '/tmp/tmp6jueyuj3']
+[2026-04-08T00:26:45.580+0000] {standard_task_runner.py:91} INFO - Job 43: Subtask ingest_to_staging
+[2026-04-08T00:26:45.667+0000] {task_command.py:426} INFO - Running <TaskInstance: retail_daily_ingestion.ingest_to_staging manual__2026-04-08T00:20:57+00:00 [running]> on host 649f4949adfd
+[2026-04-08T00:26:45.822+0000] {taskinstance.py:2644} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='data-engineering-team@company.com' AIRFLOW_CTX_DAG_OWNER='data-engineering' AIRFLOW_CTX_DAG_ID='retail_daily_ingestion' AIRFLOW_CTX_TASK_ID='ingest_to_staging' AIRFLOW_CTX_EXECUTION_DATE='2026-04-08T00:20:57+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-08T00:20:57+00:00'
+[2026-04-08T00:26:45.824+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-04-08T00:26:45.860+0000] {retail_daily_ingestion.py:166} INFO - Reading s3://raw-data/retail-data/2026-04-06/sales_transactions.csv
+[2026-04-08T00:26:45.877+0000] {base.py:84} INFO - Using connection ID 'minio_s3' for task execution.
+[2026-04-08T00:26:45.878+0000] {connection_wrapper.py:384} INFO - AWS Connection (conn_id='minio_s3', conn_type='aws') credentials retrieved from login and password.
+[2026-04-08T00:26:46.794+0000] {retail_daily_ingestion.py:180} INFO - File sales_transactions.csv loaded: 100 rows
+[2026-04-08T00:26:46.824+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:46.835+0000] {sql.py:457} INFO - Running statement: TRUNCATE TABLE staging.sales_transactions;, parameters: None
+[2026-04-08T00:26:46.857+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:46.942+0000] {sql.py:580} INFO - Done loading. Loaded a total of 100 rows into staging.sales_transactions
+[2026-04-08T00:26:46.943+0000] {retail_daily_ingestion.py:195} INFO - Staged 100 rows → staging.sales_transactions
+[2026-04-08T00:26:46.944+0000] {retail_daily_ingestion.py:166} INFO - Reading s3://raw-data/retail-data/2026-04-06/product_catalog.csv
+[2026-04-08T00:26:47.340+0000] {retail_daily_ingestion.py:180} INFO - File product_catalog.csv loaded: 20 rows
+[2026-04-08T00:26:47.359+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:47.371+0000] {sql.py:457} INFO - Running statement: TRUNCATE TABLE staging.product_catalog;, parameters: None
+[2026-04-08T00:26:47.398+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:47.463+0000] {sql.py:580} INFO - Done loading. Loaded a total of 20 rows into staging.product_catalog
+[2026-04-08T00:26:47.464+0000] {retail_daily_ingestion.py:195} INFO - Staged 20 rows → staging.product_catalog
+[2026-04-08T00:26:47.464+0000] {retail_daily_ingestion.py:166} INFO - Reading s3://raw-data/retail-data/2026-04-06/store_locations.csv
+[2026-04-08T00:26:47.740+0000] {retail_daily_ingestion.py:180} INFO - File store_locations.csv loaded: 5 rows
+[2026-04-08T00:26:47.762+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:47.793+0000] {sql.py:457} INFO - Running statement: TRUNCATE TABLE staging.store_locations;, parameters: None
+[2026-04-08T00:26:47.818+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:47.832+0000] {sql.py:580} INFO - Done loading. Loaded a total of 5 rows into staging.store_locations
+[2026-04-08T00:26:47.833+0000] {retail_daily_ingestion.py:195} INFO - Staged 5 rows → staging.store_locations
+[2026-04-08T00:26:47.850+0000] {base.py:84} INFO - Using connection ID 'postgres_retail' for task execution.
+[2026-04-08T00:26:47.864+0000] {sql.py:457} INFO - Running statement: SELECT COUNT(*) FROM staging.sales_transactions;, parameters: None
+[2026-04-08T00:26:47.866+0000] {sql.py:466} INFO - Rows affected: 1
+[2026-04-08T00:26:47.873+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.11/site-packages/***/providers/common/sql/hooks/sql.py:407 AirflowProviderDeprecationWarning: Call to deprecated method _make_common_data_structure. (The `_make_serializable` method is deprecated and support will be removed in a future version of the common.sql provider. Please update the DbApiHook's provider to a version based on common.sql >= 1.9.1.)
+[2026-04-08T00:26:47.875+0000] {retail_daily_ingestion.py:202} INFO - staging.sales_transactions row count: 100
+[2026-04-08T00:26:47.877+0000] {python.py:237} INFO - Done. Returned value was: None
+[2026-04-08T00:26:47.877+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-04-08T00:26:47.924+0000] {taskinstance.py:1205} INFO - Marking task as SUCCESS. dag_id=retail_daily_ingestion, task_id=ingest_to_staging, execution_date=20260408T002057, start_date=20260408T002645, end_date=20260408T002647
+[2026-04-08T00:26:47.996+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2026-04-08T00:26:48.017+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.11/site-packages/***/models/baseoperator.py:1296 AirflowProviderDeprecationWarning: Call to deprecated class PostgresOperator. (Please use `***.providers.common.sql.operators.sql.SQLExecuteQueryOperator`.Also, you can provide `hook_params={'schema': <database>}`.)
+[2026-04-08T00:26:48.038+0000] {taskinstance.py:3482} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-04-08T00:26:48.040+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

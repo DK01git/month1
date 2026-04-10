@@ -1,0 +1,23 @@
+[2026-04-08T01:24:08.600+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-04-08T01:24:08.621+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: retail_daily_ingestion.archive_source_files manual__2026-04-08T01:23:56+00:00 [queued]>
+[2026-04-08T01:24:08.628+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: retail_daily_ingestion.archive_source_files manual__2026-04-08T01:23:56+00:00 [queued]>
+[2026-04-08T01:24:08.628+0000] {taskinstance.py:2303} INFO - Starting attempt 1 of 3
+[2026-04-08T01:24:08.642+0000] {taskinstance.py:2327} INFO - Executing <Task(PythonOperator): archive_source_files> on 2026-04-08 01:23:56+00:00
+[2026-04-08T01:24:08.649+0000] {standard_task_runner.py:63} INFO - Started process 3910 to run task
+[2026-04-08T01:24:08.652+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'retail_daily_ingestion', 'archive_source_files', 'manual__2026-04-08T01:23:56+00:00', '--job-id', '53', '--raw', '--subdir', 'DAGS_FOLDER/retail_daily_ingestion.py', '--cfg-path', '/tmp/tmphd6zldjh']
+[2026-04-08T01:24:08.654+0000] {standard_task_runner.py:91} INFO - Job 53: Subtask archive_source_files
+[2026-04-08T01:24:08.708+0000] {task_command.py:426} INFO - Running <TaskInstance: retail_daily_ingestion.archive_source_files manual__2026-04-08T01:23:56+00:00 [running]> on host 649f4949adfd
+[2026-04-08T01:24:08.807+0000] {taskinstance.py:2644} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='data-engineering-team@company.com' AIRFLOW_CTX_DAG_OWNER='data-engineering' AIRFLOW_CTX_DAG_ID='retail_daily_ingestion' AIRFLOW_CTX_TASK_ID='archive_source_files' AIRFLOW_CTX_EXECUTION_DATE='2026-04-08T01:23:56+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-08T01:23:56+00:00'
+[2026-04-08T01:24:08.808+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-04-08T01:24:08.842+0000] {base.py:84} INFO - Using connection ID 'minio_s3' for task execution.
+[2026-04-08T01:24:08.843+0000] {connection_wrapper.py:384} INFO - AWS Connection (conn_id='minio_s3', conn_type='aws') credentials retrieved from login and password.
+[2026-04-08T01:24:09.281+0000] {retail_daily_ingestion.py:356} INFO - Archive bucket note: An error occurred (BucketAlreadyOwnedByYou) when calling the CreateBucket operation: Your previous request to create the named bucket succeeded and you already own it.
+[2026-04-08T01:24:09.296+0000] {retail_daily_ingestion.py:368} INFO - Archived: retail-data/2026-04-06/sales_transactions.csv → s3://archive-data/retail-data/2026-04-06/sales_transactions.csv
+[2026-04-08T01:24:09.307+0000] {retail_daily_ingestion.py:368} INFO - Archived: retail-data/2026-04-06/product_catalog.csv → s3://archive-data/retail-data/2026-04-06/product_catalog.csv
+[2026-04-08T01:24:09.318+0000] {retail_daily_ingestion.py:368} INFO - Archived: retail-data/2026-04-06/store_locations.csv → s3://archive-data/retail-data/2026-04-06/store_locations.csv
+[2026-04-08T01:24:09.318+0000] {python.py:237} INFO - Done. Returned value was: None
+[2026-04-08T01:24:09.319+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-04-08T01:24:09.333+0000] {taskinstance.py:1205} INFO - Marking task as SUCCESS. dag_id=retail_daily_ingestion, task_id=archive_source_files, execution_date=20260408T012356, start_date=20260408T012408, end_date=20260408T012409
+[2026-04-08T01:24:09.385+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2026-04-08T01:24:09.441+0000] {taskinstance.py:3482} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-04-08T01:24:09.444+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
